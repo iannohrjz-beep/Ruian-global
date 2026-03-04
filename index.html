@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruian Global | Earn & Promote</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f4f6f9;}
+header{background:#0a3d62;color:white;padding:15px;text-align:center;}
+.container{max-width:1100px;margin:auto;padding:20px;}
+.card{background:white;padding:20px;margin:15px 0;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);} 
+.btn{background:#27ae60;color:white;padding:10px 15px;border:none;border-radius:5px;cursor:pointer;}
+.btn:hover{background:#219150;}
+input,select{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px;}
+.nav{display:flex;justify-content:space-around;background:#fff;padding:10px;box-shadow:0 0 5px rgba(0,0,0,0.1);} 
+.nav button{background:none;border:none;font-size:16px;cursor:pointer;}
+.hidden{display:none;}
+.wallet{font-size:20px;font-weight:bold;color:#27ae60;}
+.testimonial{background:#ecf0f1;padding:10px;border-radius:6px;margin:10px 0;}
+footer{background:#0a3d62;color:white;text-align:center;padding:10px;margin-top:20px;}
+</style>
+</head>
+<body><header>
+<h1>Ruian Global</h1>
+<p>Earn • Promote • Grow Worldwide</p>
+</header><div class="container" id="auth">
+<div class="card">
+<h2>Login / Register</h2>
+<input type="text" id="phone" placeholder="Phone or Email">
+<input type="password" id="password" placeholder="Password">
+<select id="currency">
+<option value="KES">KES (Kenya)</option>
+<option value="USD">USD (Dollar)</option>
+<option value="EUR">EUR (Euro)</option>
+<option value="INR">INR (India)</option>
+</select>
+<button class="btn" onclick="login()">Continue</button>
+<p><a href="#" onclick="forgot()">Forgot Password?</a></p>
+</div>
+</div><div class="container hidden" id="app"><div class="nav">
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('tasks')">Tasks</button>
+<button onclick="show('post')">Post Task</button>
+<button onclick="show('wallet')">Wallet</button>
+<button onclick="logout()">Logout</button>
+</div><!-- Dashboard --><div id="dashboard" class="card">
+<h2>Welcome Back 👋</h2>
+<p>Your trusted earning platform</p>
+<h3>Live Testimonials</h3>
+<div id="testimonials"></div>
+</div><!-- Tasks --><div id="tasks" class="card hidden">
+<h2>Available Tasks</h2>
+<ul id="taskList"></ul>
+</div><!-- Post Task --><div id="post" class="card hidden">
+<h2>Post Promotion Task</h2>
+<select id="platform">
+<option>Instagram</option>
+<option>Facebook</option>
+<option>TikTok</option>
+</select>
+<input type="text" id="link" placeholder="Post / Page Link">
+<select id="type">
+<option>Likes</option>
+<option>Followers</option>
+<option>Views</option>
+<option>Affiliate Clicks</option>
+</select>
+<input type="number" id="amount" placeholder="Amount to Bid">
+<button class="btn" onclick="payAndPost()">Pay & Post</button>
+</div><!-- Wallet --><div id="wallet" class="card hidden">
+<h2>My Wallet</h2>
+<p>Balance: <span class="wallet" id="balance">0</span></p>
+<button class="btn" onclick="withdraw()">Withdraw (M-Pesa)</button>
+</div></div><footer>
+<p>© 2026 Ruian Global | Secure • Trusted • Worldwide</p>
+</footer><script>
+let user = null;
+let wallet = 0;
+
+let testimonials = [
+"Earned KES 2,300 in one week 🔥",
+"Paid my rent using Ruian Global 😍",
+"Best online job platform 💯",
+"I made $45 in 3 days 💵",
+"Very legit and fast payouts 🚀"
+];
+
+let tasks = [
+{title:"Like IG Post", pay:20},
+{title:"Follow TikTok Page", pay:30},
+{title:"Watch Video", pay:15},
+{title:"Affiliate Click", pay:25}
+];
+
+function login(){
+let phone = document.getElementById("phone").value;
+let pass = document.getElementById("password").value;
+let curr = document.getElementById("currency").value;
+
+if(phone==""||pass==""){alert("Fill all fields");return;}
+
+user = {phone,pass,curr};
+localStorage.setItem("ruianUser",JSON.stringify(user));
+
+alert("Fingerprint verified ✅ (Demo)");
+
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+load();
+}
+
+function load(){
+show('dashboard');
+loadTestimonials();
+loadTasks();
+updateWallet();
+}
+
+function show(id){
+['dashboard','tasks','post','wallet'].forEach(x=>{
+document.getElementById(x).classList.add('hidden');
+});
+document.getElementById(id).classList.remove('hidden');
+}
+
+function loadTestimonials(){
+let box = document.getElementById("testimonials");
+let i=0;
+setInterval(()=>{
+box.innerHTML = `<div class='testimonial'>${testimonials[i]}</div>`;
+i=(i+1)%testimonials.length;
+},2500);
+}
+
+function loadTasks(){
+let list = document.getElementById("taskList");
+list.innerHTML="";
+tasks.forEach((t,i)=>{
+let li = document.createElement("li");
+li.innerHTML = `${t.title} - Earn ${t.pay} <button class='btn' onclick='doTask(${i})'>Do</button>`;
+list.appendChild(li);
+});
+}
+
+function doTask(i){
+wallet += tasks[i].pay;
+alert("Task completed! +"+tasks[i].pay);
+updateWallet();
+}
+
+function updateWallet(){
+document.getElementById("balance").innerText = wallet+" "+(user?user.curr:'');
+}
+
+function payAndPost(){
+let amt = document.getElementById("amount").value;
+if(amt==""||amt<=0){alert("Enter valid amount");return;}
+
+alert("M-Pesa STK Push Sent: "+amt);
+alert("Payment Received ✅ Task Posted");
+}
+
+function withdraw(){
+if(wallet<50){alert("Minimum withdrawal is 50");return;}
+alert("Withdrawal Requested via M-Pesa ✅");
+wallet=0;
+updateWallet();
+}
+
+function logout(){
+localStorage.removeItem("ruianUser");
+location.reload();
+}
+
+function forgot(){
+alert("OTP Sent (Demo) ✔ Reset Link Sent");
+}
+
+// Auto Login
+let saved = localStorage.getItem("ruianUser");
+if(saved){
+user = JSON.parse(saved);
+document.getElementById("auth").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+alert("Fingerprint Login Successful ✅ (Demo)");
+load();
+}
+</script></body>
+</html>
