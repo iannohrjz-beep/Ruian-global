@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruian Global</title>
+<style>
+  body {font-family: Arial, sans-serif; margin:0; padding:0; background: #f0f4f8;}
+  header {background: #0a3d62; color: #fff; padding: 1rem; text-align: center;}
+  nav {background: #0984e3; padding: 0.5rem; text-align: center;}
+  nav button {margin:0 0.5rem; padding: 0.5rem 1rem; background:#74b9ff; border:none; border-radius:5px; color:#fff; cursor:pointer;}
+  section {padding: 1rem;}
+  .task-card {background:#fff; padding:1rem; margin:0.5rem 0; border-radius:10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+  .wallet {background:#ffeaa7; padding:1rem; margin:1rem 0; border-radius:10px; text-align:center;}
+  .testimonial {background:#55efc4; padding:1rem; margin:1rem 0; border-radius:10px; text-align:center; font-weight:bold; animation: fade 5s infinite;}
+  @keyframes fade {0%{opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{opacity:0;}}
+  .leaderboard {background:#fd79a8; padding:1rem; border-radius:10px; margin:1rem 0;}
+  .badge {background:#ffeaa7; display:inline-block; padding:0.3rem 0.6rem; margin:0.3rem; border-radius:5px;}
+  footer {background:#0a3d62; color:#fff; text-align:center; padding:1rem; margin-top:2rem;}
+  .vip {color:#f39c12; font-weight:bold;}
+  .button {padding:0.5rem 1rem; background:#6c5ce7; color:#fff; border:none; border-radius:5px; cursor:pointer;}
+  .floating-vip {position:fixed; top:10%; right:1%; background:#f39c12; color:#fff; padding:1rem; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.3); cursor:pointer;}
+  .language-selector {margin:1rem 0; text-align:center;}
+  .language-selector select {padding:0.5rem; border-radius:5px; border:1px solid #ccc;}
+  .modal {display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;}
+  .modal-content {background:#fff; padding:2rem; border-radius:10px; text-align:center; max-width:400px; width:90%;}
+  .modal-content input {padding:0.5rem; width:80%; margin:0.5rem 0; border-radius:5px; border:1px solid #ccc;}
+  .modal-content button {padding:0.5rem 1rem; border:none; border-radius:5px; background:#6c5ce7; color:#fff; cursor:pointer;}
+</style>
+</head>
+<body onload="showLoginModal()">
+<header>
+<h1>Ruian Global 🌍</h1>
+<p>Your platform to earn, promote, and grow globally</p>
+</header>
+<div class="floating-vip" onclick="alert('VIP Tasks highlighted!')">🔥 VIP Tasks</div>
+<nav>
+<button onclick="showSection('tasks')">Tasks</button>
+<button onclick="showSection('wallet')">Wallet</button>
+<button onclick="showSection('leaderboard')">Leaderboard</button>
+<button onclick="showSection('badges')">Badges</button>
+<button onclick="showSection('faq')">FAQs</button>
+</nav>
+<div class="language-selector">
+<label for="lang">Select Language: </label>
+<select id="lang" onchange="changeLanguage(this.value)">
+<option value="en">English</option>
+<option value="sw">Swahili</option>
+<option value="zh">Chinese</option>
+<option value="hi">Hindi</option>
+</select>
+</div>
+<section id="tasks">
+<h2>Available Tasks</h2>
+<div class="task-card">
+<p>Like/Follow Task - 50 Likes <span class="vip">VIP</span></p>
+<p>Reward: 2 KSh per like</p>
+<button class="button" onclick="completeTask(this,100)">Complete Task</button>
+</div>
+<div class="task-card">
+<p>Business Promotion - 500 Views</p>
+<p>Reward: 1 KSh per view</p>
+<button class="button" onclick="completeTask(this,50)">Complete Task</button>
+</div>
+<div class="task-card">
+<p>Quiz Task - Answer 5 Questions</p>
+<p>Reward: 10 KSh total</p>
+<button class="button" onclick="completeTask(this,10)">Complete Task</button>
+</div>
+<div class="task-card">
+<p>Video Content Task - Upload a 10-second clip</p>
+<p>Reward: 20 KSh</p>
+<button class="button" onclick="completeTask(this,20)">Complete Task</button>
+</div>
+<div class="task-card">
+<p>App / Link Download Task</p>
+<p>Reward: 15 KSh</p>
+<button class="button" onclick="completeTask(this,15)">Complete Task</button>
+</div>
+</section>
+<section id="wallet" style="display:none;">
+<h2>Your Wallet</h2>
+<div class="wallet">Balance: <span id="walletBalance">0</span> KSh</div>
+</section>
+<section id="leaderboard" style="display:none;">
+<h2>Leaderboard</h2>
+<div class="leaderboard" id="leaderboardList">
+<p>1. Alice - 120 KSh</p>
+<p>2. Bob - 100 KSh</p>
+<p>3. Charlie - 90 KSh</p>
+</div>
+</section>
+<section id="badges" style="display:none;">
+<h2>Badges & Achievements</h2>
+<div class="badge">First 5 Tasks</div>
+<div class="badge">100 Likes Delivered</div>
+<div class="badge">3-Day Streak</div>
+</section>
+<section id="faq" style="display:none;">
+<h2>FAQs</h2>
+<p>Q: How do I earn?</p>
+<p>A: Complete tasks, referrals, and participate in promotions.</p>
+<p>Q: How do I refer?</p>
+<p>A: Share your referral link. Each referred user gives you 20 KSh.</p>
+<p>Q: How do I withdraw?</p>
+<p>A: Placeholder until payment system integrated.</p>
+</section>
+<section class="testimonial" id="testimonial">Loading testimonials...</section><!-- Hybrid Login Modal --><div class="modal" id="loginModal">
+  <div class="modal-content">
+    <h3>Login or Register</h3>
+    <input type="text" id="userNumber" placeholder="Enter Phone Number">
+    <input type="password" id="userPassword" placeholder="Enter Password">
+    <br>
+    <button onclick="loginUser()">Login / Register</button>
+    <p>After first login, optional fingerprint login will be available.</p>
+  </div>
+</div><script>
+let walletBalance = 0;
+function showSection(section) {
+  const sections = ['tasks','wallet','leaderboard','badges','faq'];
+  sections.forEach(s => document.getElementById(s).style.display='none');
+  document.getElementById(section).style.display='block';
+}
+function completeTask(button, reward) {
+  walletBalance += reward;
+  document.getElementById('walletBalance').innerText = walletBalance;
+  button.innerText = 'Completed ✅';
+  button.disabled = true;
+}
+// Rotating Testimonials
+const testimonials = [
+  'I earned KSh 120 in one day doing simple tasks!',
+  'My event reached over 500 people in 24 hours!',
+  'Got 300 new followers through Ruian Global!',
+  'I completed 5 tasks and got paid fast!',
+  'My small business got new customers from this platform!'
+];
+let currentTestimonial = 0;
+function rotateTestimonials() {
+  document.getElementById('testimonial').innerText = testimonials[currentTestimonial];
+  currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+}
+setInterval(rotateTestimonials, 4000);
+rotateTestimonials();
+function changeLanguage(lang) {
+  alert('Language switched to ' + lang + ' (simulation)');
+}
+
+// Hybrid Login Functions
+function showLoginModal() {
+  document.getElementById('loginModal').style.display = 'flex';
+}
+function loginUser() {
+  const number = document.getElementById('userNumber').value;
+  const password = document.getElementById('userPassword').value;
+  if(number && password){
+    alert('Logged in successfully! Fingerprint login will be available next time.');
+    document.getElementById('loginModal').style.display = 'none';
+  } else {
+    alert('Please enter both number and password');
+  }
+}
+</script><footer>
+<p>© 2026 Ruian Global | All Rights Reserved</p>
+</footer>
+</body>
+</html>
