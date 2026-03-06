@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruian Network - Earn, Promote, Grow</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f2f2f2; margin:0; padding:0;}
+header { background:#ff4b2b; color:#fff; padding:20px; text-align:center; font-size:2em; font-weight:bold;}
+header .tagline { font-size:1.2em; font-weight:normal; margin-top:5px;}
+.container { max-width:1200px; margin:20px auto; padding:0 20px;}
+.tabs { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; }
+.tab-btn { background:#ddd; border:none; padding:10px 15px; cursor:pointer; border-radius:8px; font-weight:bold;}
+.tab-btn.active { background:#ff4b2b; color:#fff;}
+.task-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+.task-card { background:#fff; padding:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s; position:relative;}
+.task-card:hover { transform: translateY(-5px);}
+.task-title { font-weight:bold; font-size:1.2em;}
+.task-badge { display:inline-block; padding:3px 8px; border-radius:8px; color:#fff; font-weight:bold; margin-top:5px; font-size:0.9em;}
+.low-task { background:#95a5a6;}
+.medium-task { background:#3498db;}
+.high-task { background:#f1c40f; color:#000;}
+.vip-task { background:#e74c3c;}
+.vip-glow { box-shadow:0 0 15px gold; }
+.coin-animation { position:absolute; width:30px; height:30px; background: gold; border-radius:50%; animation: coinDrop 1s forwards;}
+@keyframes coinDrop { 0% {transform: translateY(0) scale(0);} 50% {transform: translateY(-50px) scale(1.2);} 100% {transform: translateY(0) scale(1);} }
+.admin-panel { display:none; background:#fff; padding:20px; border-radius:12px; margin-top:20px; box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+.admin-tabs button { margin-right:10px; padding:8px 12px; border:none; background:#ff4b2b; color:#fff; border-radius:6px; cursor:pointer; font-weight:bold;}
+.admin-tab-content { display:none; margin-top:15px;}
+.login-section { background:#fff; padding:20px; border-radius:12px; max-width:400px; margin:20px auto; box-shadow:0 5px 15px rgba(0,0,0,0.2);}
+.login-section input { width:100%; margin:5px 0; padding:10px; border-radius:8px; border:1px solid #ccc;}
+.login-section button { background:#ff4b2b; color:#fff; border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; margin-top:5px;}
+.faqs, .settings, .language { background:#fff; padding:15px; border-radius:12px; margin-top:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+.language select { padding:8px; border-radius:6px; margin-top:5px;}
+.testimonials { margin-top:20px; background:#fff; padding:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); min-height:60px; text-align:center; font-style:italic;}
+.wallets { display:flex; gap:15px; margin-top:20px; }
+.wallet { background:#fff; padding:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); flex:1; text-align:center;}
+footer { text-align:center; padding:15px; background:#ff4b2b; color:#fff; margin-top:20px;}
+.activity-feed { background:#fff; padding:10px; border-radius:12px; margin-top:20px; height:120px; overflow-y:auto; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+</style>
+</head>
+<body>
+
+<header>
+  Ruian Network
+  <div class="tagline">Earn • Promote • Hire • Grow Online</div>
+</header>
+
+<div class="container">
+
+<!-- Login Section -->
+<div class="login-section" id="loginSection">
+<h2>Login</h2>
+<input type="email" id="loginEmail" placeholder="Enter email" autocomplete="username">
+<input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password">
+<button onclick="login()">Login</button>
+<button onclick="forgotPassword()">Forgot Password?</button>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminDashboard">
+<h2>Admin Dashboard</h2>
+<div class="admin-tabs">
+<button onclick="showTab('wallet')">Wallet</button>
+<button onclick="showTab('tasks')">Tasks</button>
+<button onclick="showTab('freelancers')">Freelancers</button>
+<button onclick="showTab('affiliate')">Affiliate</button>
+<button onclick="showTab('settings')">Settings</button>
+</div>
+<div class="admin-tab-content" id="walletTab">
+<h3>Admin Wallet</h3>
+<p id="adminWallet">0 KES</p>
+<p>Total Tasks Posted: <span id="totalTasks">0</span></p>
+<p>Total Performers: <span id="totalPerformers">0</span></p>
+</div>
+<div class="admin-tab-content" id="tasksTab">
+<h3>Manage Tasks</h3>
+<p>You can post, edit, or monitor tasks here.</p>
+</div>
+<div class="admin-tab-content" id="freelancersTab">
+<h3>Freelancer Services</h3>
+<p>Monitor, approve, or edit freelancer services posted.</p>
+</div>
+<div class="admin-tab-content" id="affiliateTab">
+<h3>Affiliate Products</h3>
+<p>Approve affiliate links, commissions, and sales.</p>
+</div>
+<div class="admin-tab-content" id="settingsTab">
+<h3>Site Settings</h3>
+<p>Manage VIP tiers, payouts, or add new features/apps here.</p>
+</div>
+
+</div>
+
+<!-- Poster Task Form -->
+<section class="task-card" id="taskFormSection" style="display:none;">
+<h2 class="task-title">Post a Task / Service</h2>
+<div class="task-action">
+<label>Platform / Category</label>
+<select id="platform">
+<option value="Instagram">Instagram</option>
+<option value="Facebook">Facebook</option>
+<option value="TikTok">TikTok</option>
+<option value="YouTube Like">YouTube Like</option>
+<option value="YouTube Subscriber">YouTube Subscriber</option>
+<option value="YouTube View">YouTube View</option>
+<option value="Viral Video">Viral Video</option>
+<option value="Freelancer Service">Freelancer Service</option>
+<option value="Affiliate Product">Affiliate Product</option>
+</select>
+
+<label>Description / Link</label>
+<input type="text" id="taskDesc" placeholder="Enter post link, service description, or product link">
+
+<label>Target Actions</label>
+<select id="targetType">
+<option value="likes">Likes</option>
+<option value="views">Views</option>
+<option value="followers">Followers</option>
+<option value="subscribers">Subscribers</option>
+<option value="service">Service</option>
+<option value="affiliate">Affiliate</option>
+</select>
+<input type="number" id="targetNumber" placeholder="Enter target number or price for services">
+
+<label>Price Class</label>
+<select id="priceClass" onchange="setPriceRange()">
+<option value="low">Low (200-4,999 KES)</option>
+<option value="medium">Medium (5,000-14,999 KES)</option>
+<option value="high">High (15,000-49,999 KES)</option>
+<option value="vip">VIP (50,000-500,000 KES)</option>
+</select>
+
+<label>Manual Price Tag (KES)</label>
+<input type="number" id="priceTag" placeholder="Enter amount" min="200">
+<button onclick="postTask()">Post</button>
+</div>
+</section>
+
+<!-- Platform Tabs -->
+<div class="tabs" id="platformTabs" style="display:none;">
+<button class="tab-btn active" onclick="showPlatformTab('Instagram')">Instagram</button>
+<button class="tab-btn" onclick="showPlatformTab('Facebook')">Facebook</button>
+<button class="tab-btn" onclick="showPlatformTab('TikTok')">TikTok</button>
+<button class="tab-btn" onclick="showPlatformTab('YouTube Like')">YouTube Likes</button>
+<button class="tab-btn" onclick="showPlatformTab('YouTube Subscriber')">YouTube Subscribers</button>
+<button class="tab-btn" onclick="showPlatformTab('YouTube View')">YouTube Views</button>
+<button class="tab-btn" onclick="showPlatformTab('Viral Video')">Viral Video</button>
+<button class="tab-btn" onclick="showPlatformTab('Freelancer Service')">Freelancers</button>
+<button class="tab-btn" onclick="showPlatformTab('Affiliate Product')">Affiliate</button>
+</div>
+
+<!-- Task Grids -->
+<div id="taskGrids" style="display:none;">
+<div id="Instagram" class="task-grid"></div>
+<div id="Facebook" class="task-grid" style="display:none;"></div>
+<div id="TikTok" class="task-grid" style="display:none;"></div>
+<div id="YouTube Like" class="task-grid" style="display:none;"></div>
+<div id="YouTube Subscriber" class="task-grid" style="display:none;"></div>
+<div id="YouTube View" class="task-grid" style="display:none;"></div>
+<div id="Viral Video" class="task-grid" style="display:none;"></div>
+<div id="Freelancer Service" class="task-grid" style="display:none;"></div>
+<div id="Affiliate Product" class="task-grid" style="display:none;"></div>
+</div>
+
+<!-- Testimonials -->
+<div class="testimonials" id="testimonialBox" style="display:none;"></div>
+
+<!-- Live Activity Feed -->
+<div class="activity-feed" id="activityFeed" style="display:none;"></div>
+
+<!-- Wallets -->
+<div class="wallets" id="walletSection" style="display:none;">
+<div class="wallet">
+<h3>Performer Wallet</h3>
+<span id="performerWallet">0 KES</span>
+</div>
+</div>
+
+<!-- FAQs -->
+<div class="faqs">
+<h3>FAQs</h3>
+<p>Q: How do I post a task?<br>A: Fill in the form above and set your target actions and price.</p>
+<p>Q: How does payout work?<br>A: System distributes funds automatically to performers and admin.</p>
+<p>Q: Can I edit a task?<br>A: Only before task starts. Once active, edits are disabled.</p>
+</div>
+
+<!-- Settings -->
+<div class="settings">
+<h3>Settings</h3>
+<label>Language:</label>
+<div class="language">
+<select id="languageSelect" onchange="changeLanguage()">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="zh">Chinese</option>
+</select>
+</div>
+</div>
+
+</div>
+
+<footer>
+© 2026 Ruian Network. All Rights Reserved.
+</footer>
+
+<script>
+// Admin credentials
+const adminEmail = "iannohmcool@gmail.com";
+const adminPassword = "ogworiah"; 
+let isAdmin = false;
+let adminWallet = 0, performerWallet = 0, totalTasks = 0, totalPerformers = 0;
+
+// Starter Tasks
+const starterTasks = [
+{platform:'Instagram',desc:'Promo post for Ruian Network',target:250,type:'likes',price:500,class:'low'},
+{platform:'Facebook',desc:'Business awareness',target:300,type:'followers',price:800,class:'low'},
+{platform:'TikTok',desc:'Viral dance challenge',target:1000,type:'views',price:2000,class:'medium'},
+{platform:'YouTube Subscriber',desc:'Ruian Network channel growth',target:150,type:'subscribers',price:5000,class:'medium'},
+{platform:'YouTube View',desc:'Promo video awareness',target:5000,type:'views',price:15000,class:'high'},
+{platform:'Viral Video',desc:'Special VIP campaign',target:10000,type:'views',price:50000,class:'vip'},
+{platform:'Freelancer Service',desc:'Logo Design by Alex',target:1,type:'service',price:1500,class:'medium'},
+{platform:'Affiliate Product',desc:'Sell Shoes Online',target:1,type:'affiliate',price:200,class:'low'}
+];
+
+// Testimonials
+const testimonials = [
+"John posted 250 Instagram likes — completed within hours! 🎉",
+"Mary completed 300 Facebook followers — changing lives! 🚀",
+"VIP Viral task completed in 2 hours — amazing results!",
+"TikTok promo task done in record time — performers earning!",
+"Ruian Network YouTube subscriber task achieved 150 subscribers!"
+];
+
+// Activity Feed
+let activities = [];
+
+// Load session and starter tasks
+window.onload = function(){
+  const savedUser = localStorage.getItem('ruianNetworkUser');
+  if(savedUser){
+    const userData = JSON.parse(savedUser);
+    isAdmin = userData.isAdmin;
+    showDashboard(isAdmin);
+  }
+  loadStarterTasks();
+  startTestimonials();
+  startActivityFeed();
+};
+
+// Login
+function login(){
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  if(email === adminEmail && password === adminPassword){
+    isAdmin = true;
+    alert("Welcome Admin! Dashboard unlocked.");
+  } else {
+    isAdmin = false;
+    alert("Logged in as User.");
+  }
+
+  localStorage.setItem('ruianNetworkUser', JSON.stringify({email,password,isAdmin}));
+  showDashboard(isAdmin);
+}
+
+// Show dashboard / panels
+function showDashboard(isAdmin){
+  document.getElementById('loginSection').style.display='none';
+  document.getElementById('taskFormSection').style.display='block';
+  document.getElementById('platformTabs').style.display='flex';
+  document.getElementById('taskGrids').style.display='block';
+  document.getElementById('walletSection').style.display='flex';
+  document.getElementById('testimonialBox').style.display='block';
+  document.getElementById('activityFeed').style.display='block';
+  document.getElementById('adminDashboard').style.display = isAdmin ? 'block' : 'none';
+}
+
+// Forgot password
+function forgotPassword(){ const email = prompt("Enter your email to reset password:"); if(email){ alert("Password reset link sent to "+email+" (simulated)."); } }
+
+// Price class range
+function setPriceRange(){ const priceInput = document.getElementById('priceTag'); const selectedClass = document.getElementById('priceClass').value; switch(selectedClass){ case 'low': priceInput.min=200; priceInput.max=4999; break; case 'medium': priceInput.min=5000; priceInput.max=14999; break; case 'high': priceInput.min=15000; priceInput.max=49999; break; case 'vip': priceInput.min=50000; priceInput.max=500000; break; } }
+
+// Load starter tasks
+function loadStarterTasks(){ starterTasks.forEach(task => addTaskCard(task)); }
+
+// Add task card
+function addTaskCard(task){
+  const div = document.createElement('div');
+  div.className='task-card';
+  if(task.class==='vip') div.classList.add('vip-glow');
+  div.innerHTML=`<strong>${task.platform}</strong><p>${task.desc}</p><span class="task-badge">${task.target} ${task.type}</span>`;
+  document.getElementById(task.platform).appendChild(div);
+
+  const adminCut = task.price*0.15;
+  const perPerformer = (task.price-adminCut)/task.target;
+  adminWallet += adminCut;
+  performerWallet += perPerformer*task.target;
+  totalTasks++;
+  totalPerformers += task.target;
+  if(isAdmin){ document.getElementById('adminWallet').innerText = adminWallet.toFixed(2)+' KES'; }
+  document.getElementById('performerWallet').innerText = performerWallet.toFixed(2)+' KES';
+
+  // Add activity feed
+  activities.unshift(`${task.desc} posted on ${task.platform} — target: ${task.target} ${task.type}`);
+  if(activities.length>10) activities.pop();
+  updateActivityFeed();
+
+}
+
+// Show platform tasks
+function showPlatformTab(platform){
+  const tabs = ['Instagram','Facebook','TikTok','YouTube Like','YouTube Subscriber','YouTube View','Viral Video','Freelancer Service','Affiliate Product'];
+  tabs.forEach(tab => document.getElementById(tab).style.display = 'none');
+  document.getElementById(platform).style.display='grid';
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Post task
+function postTask(){
+  const platform = document.getElementById('platform').value;
+  const desc = document.getElementById('taskDesc').value;
+  const target = parseInt(document.getElementById('targetNumber').value);
+  const type = document.getElementById('targetType').value;
+  const price = parseInt(document.getElementById('priceTag').value);
+  const selectedClass = document.getElementById('priceClass').value;
+  const min = parseInt(document.getElementById('priceTag').min);
+  const max = parseInt(document.getElementById('priceTag').max);
+  if(!desc || !target || !price){ alert
