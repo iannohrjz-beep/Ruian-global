@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruian Global Network - Earn, Grow, Share</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f5f5f7; margin:0; padding:0; color:#333;}
+header { background:#1e3a8a; color:#fff; padding:20px; text-align:center; font-size:2em; font-weight:bold; }
+header .tagline { font-size:1.2em; font-weight:normal; margin-top:5px; }
+.container { max-width:900px; margin:20px auto; padding:0 15px; }
+.login-section, .task-form, .admin-panel, .testimonials, .faqs, .settings, .wallets { background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+.login-section input, .task-form input, .task-form select { width:100%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #ccc; }
+button { background:#1e3a8a; color:#fff; border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:5px; width:100%; }
+button:hover { background:#2563eb; }
+.task-list { display:flex; flex-direction:column; gap:15px; }
+.task-card { background:#fefefe; padding:15px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); position:relative; transition: transform 0.3s; }
+.task-card:hover { transform: translateY(-5px); }
+.task-title { font-weight:bold; font-size:1.2em; margin-bottom:5px; }
+.task-badge { display:inline-block; padding:3px 8px; border-radius:8px; color:#fff; font-weight:bold; font-size:0.9em; }
+.low-task { background:#6b7280; }
+.medium-task { background:#3b82f6; }
+.high-task { background:#facc15; color:#000; }
+.vip-task { background:#e11d48; }
+.vip-glow { box-shadow:0 0 15px gold; }
+.coin-animation { position:absolute; width:30px; height:30px; background: gold; border-radius:50%; animation: coinDrop 1s forwards; }
+@keyframes coinDrop { 0% {transform: translateY(0) scale(0);} 50% {transform: translateY(-50px) scale(1.2);} 100% {transform: translateY(0) scale(1);} }
+footer { text-align:center; padding:15px; background:#1e3a8a; color:#fff; margin-top:20px; }
+.testimonials { text-align:center; font-style:italic; min-height:50px; }
+</style>
+</head>
+<body>
+
+<header>
+  Ruian Global Network
+  <div class="tagline">Earn. Grow. Share. Build your digital empire!</div>
+</header>
+
+<div class="container">
+
+<!-- Login Section -->
+<div class="login-section" id="loginSection">
+<h2>Login</h2>
+<input type="email" id="loginEmail" placeholder="Enter email" autocomplete="username">
+<input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password">
+<button onclick="login()">Login</button>
+<button onclick="forgotPassword()">Forgot Password?</button>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="adminDashboard" style="display:none;">
+<h2>Admin Dashboard</h2>
+<div>
+<button onclick="showAdminTab('wallet')">Wallet</button>
+<button onclick="showAdminTab('tasks')">Tasks</button>
+<button onclick="showAdminTab('settings')">Settings</button>
+</div>
+<div id="walletTab" style="display:none;">
+<h3>Admin Wallet</h3>
+<p id="adminWallet">0 KES</p>
+<p>Total Tasks Posted: <span id="totalTasks">0</span></p>
+<p>Total Performers: <span id="totalPerformers">0</span></p>
+</div>
+<div id="tasksTab" style="display:none;">
+<h3>Manage Tasks</h3>
+<p>Post, monitor, or edit tasks here (admin only).</p>
+</div>
+<div id="settingsTab" style="display:none;">
+<h3>Site Settings</h3>
+<p>Manage VIP tiers, payouts, or add features/apps here.</p>
+</div>
+</div>
+
+<!-- Poster Task Form -->
+<div class="task-form" id="taskFormSection" style="display:none;">
+<h2 class="task-title">Post a Task / Service</h2>
+<label>Platform / Service</label>
+<select id="platform">
+<option value="Instagram">Instagram</option>
+<option value="Facebook">Facebook</option>
+<option value="TikTok">TikTok</option>
+<option value="YouTube Like">YouTube Like</option>
+<option value="YouTube Subscriber">YouTube Subscriber</option>
+<option value="YouTube View">YouTube View</option>
+<option value="Viral Video">Viral Video</option>
+<option value="Freelancing">Freelancing Service</option>
+<option value="Affiliate Marketing">Affiliate Marketing Task</option>
+</select>
+
+<label>Task Description / Link</label>
+<input type="text" id="taskDesc" placeholder="Enter description or link">
+
+<label>Target Type</label>
+<select id="targetType">
+<option value="likes">Likes</option>
+<option value="views">Views</option>
+<option value="followers">Followers</option>
+<option value="subscribers">Subscribers</option>
+<option value="service">Service Completion</option>
+</select>
+
+<label>Price Class</label>
+<select id="priceClass" onchange="setPriceRange()">
+<option value="low">Low (200-4,999 KES)</option>
+<option value="medium">Medium (5,000-14,999 KES)</option>
+<option value="high">High (15,000-49,999 KES)</option>
+<option value="vip">VIP (50,000-500,000 KES)</option>
+</select>
+
+<label>Total Money (KES)</label>
+<input type="number" id="priceTag" placeholder="Enter total amount" min="200">
+
+<p id="calculatedPerformers">Performers will be calculated automatically.</p>
+
+<button onclick="postTask()">Post Task</button>
+</div>
+
+<!-- Task List -->
+<div class="task-list" id="taskList" style="display:none;"></div>
+
+<!-- Testimonials -->
+<div class="testimonials" id="testimonialBox" style="display:none;"></div>
+
+<!-- FAQs -->
+<div class="faqs">
+<h3>FAQs</h3>
+<p>Q: How do I post a task?<br>A: Fill the form above and set your target actions and price.</p>
+<p>Q: How does payout work?<br>A: System splits admin fee & distributes remainder to performers automatically.</p>
+<p>Q: Can I edit tasks?<br>A: Only before tasks start. Active tasks cannot be edited.</p>
+</div>
+
+<!-- Settings -->
+<div class="settings">
+<h3>Settings</h3>
+<label>Language:</label>
+<select id="languageSelect" onchange="changeLanguage()">
+<option value="en">English</option>
+<option value="hi">Hindi</option>
+<option value="zh">Chinese</option>
+</select>
+</div>
+
+<!-- Performer Wallet -->
+<div class="wallets" id="walletSection" style="display:none;">
+<h3>Performer Wallet</h3>
+<span id="performerWallet">0 KES</span>
+</div>
+
+</div>
+
+<footer>
+© 2026 Ruian Global Network | Help: 0748121890 | All Rights Reserved
+</footer>
+
+<script>
+// Admin credentials
+const adminEmail = "iannohmcool@gmail.com";
+const adminPassword = "ogworiah"; 
+let isAdmin = false;
+let adminWallet = 0, performerWallet = 0, totalTasks = 0, totalPerformers = 0;
+
+// Starter Tasks
+const starterTasks = [
+{platform:'Instagram',desc:'Promo post for Ruian Global',target:250,type:'likes',price:500,class:'low'},
+{platform:'Facebook',desc:'Business awareness',target:300,type:'followers',price:800,class:'low'},
+{platform:'TikTok',desc:'Viral dance challenge',target:1000,type:'views',price:2000,class:'medium'},
+{platform:'YouTube Subscriber',desc:'Channel growth',target:150,type:'subscribers',price:5000,class:'medium'},
+{platform:'YouTube View',desc:'Promo video',target:5000,type:'views',price:15000,class:'high'},
+{platform:'Viral Video',desc:'VIP campaign',target:10000,type:'views',price:50000,class:'vip'}
+];
+
+// Testimonials
+const testimonials = [
+"John posted 250 Instagram likes — completed within hours! 🎉",
+"Mary completed 300 Facebook followers — changing lives! 🚀",
+"VIP Viral task completed in 2 hours — amazing results!",
+"TikTok promo task done in record time — performers earning!",
+"Ruian Global YouTube subscriber task achieved 150 subscribers!"
+];
+
+// Load session and starter tasks
+window.onload = function(){
+  const savedUser = localStorage.getItem('ruianGlobalUser');
+  if(savedUser){
+    const userData = JSON.parse(savedUser);
+    isAdmin = userData.isAdmin;
+    showDashboard(isAdmin);
+  }
+  loadStarterTasks();
+  startTestimonials();
+};
+
+// Login
+function login(){
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  if(email === adminEmail && password === adminPassword){
+    isAdmin = true;
+    alert("Welcome Admin! Dashboard unlocked.");
+  } else {
+    isAdmin = false;
+    alert("Logged in as User.");
+  }
+
+  localStorage.setItem('ruianGlobalUser', JSON.stringify({email,password,isAdmin}));
+  showDashboard(isAdmin);
+}
+
+// Show dashboard / panels
+function showDashboard(isAdmin){
+  document.getElementById('loginSection').style.display='none';
+  document.getElementById('taskFormSection').style.display='block';
+  document.getElementById('taskList').style.display='flex';
+  document.getElementById('walletSection').style.display='block';
+  document.getElementById('testimonialBox').style.display='block';
+  document.getElementById('adminDashboard').style.display = isAdmin ? 'block' : 'none';
+}
+
+// Forgot password
+function forgotPassword(){ const email = prompt("Enter your email to reset password:"); if(email){ alert("Password reset link sent to "+email+" (simulated)."); } }
+
+// Price class range
+function setPriceRange(){ const priceInput = document.getElementById('priceTag'); const selectedClass = document.getElementById('priceClass').value; switch(selectedClass){ case 'low': priceInput.min=200; priceInput.max=4999; break; case 'medium': priceInput.min=5000; priceInput.max=14999; break; case 'high': priceInput.min=15000; priceInput.max=49999; break; case 'vip': priceInput.min=50000; priceInput.max=500000; break; } }
+
+// Load starter tasks
+function loadStarterTasks(){ starterTasks.forEach(task => addTaskCard(task)); }
+
+// Add task card
+function addTaskCard(task){
+  const div = document.createElement('div');
+  div.className='task-card';
+  if(task.class==='vip') div.classList.add('vip-glow');
+  div.innerHTML=`<div class="task-title">${task.platform}</div><p>${task.desc}</p><span class="task-badge ${task.class}-task">${task.target} ${task.type}</span>`;
+  document.getElementById('taskList').appendChild(div);
+
+  const adminCut = task.price*0.15;
+  const perPerformer = (task.price-adminCut)/task.target;
+  adminWallet += adminCut;
+  performerWallet += perPerformer*task.target;
+  totalTasks++;
+  totalPerformers += task.target;
+  if(isAdmin){ document.getElementById('adminWallet').innerText = adminWallet.toFixed(2)+' KES'; }
+  document.getElementById('performerWallet').innerText = performerWallet.toFixed(2)+' KES';
+}
+
+// Post task
+function postTask(){
+  const platform = document.getElementById('platform').value;
+  const desc = document.getElementById('taskDesc').value;
+  const type = document.getElementById('targetType').value;
+  const price = parseInt(document.getElementById('priceTag').value);
+  const selectedClass = document.getElementById('priceClass').value;
+  const min = parseInt(document.getElementById('priceTag').min);
+  const max = parseInt(document.getElementById('priceTag').max);
+  if(!desc || !price){ alert("Fill all fields!"); return; }
+  if(price < min || price > max){ alert(`Amount must be between ${min} and ${max} KES for the selected class!`); return; }
+
+  // Auto calculate performers assuming 2 KES per action
+  const adminCut = price*0.15;
+  const remaining = price - adminCut;
+  const perAction = 2;
+  const calculatedPerformers = Math.floor(remaining/perAction);
+  document.getElementById('calculatedPerformers').innerText = `Number of performers: ${calculatedPerformers} (calculated automatically)`;
+
+  const task = {platform,desc,target:calculatedPerformers,type,price,class:selectedClass};
+  addTaskCard(task);
+
+  for(let i=0;i<5;i++){
+    const coin = document.createElement('div');
+    coin.className='coin-animation';
+    coin.style.left=Math.random()*100+'px';
+    document.body.appendChild(coin);
+    setTimeout(()=>{ coin.remove(); },1000);
+  }
+
+  document.getElementById('taskDesc').value='';
+  document.getElementById('priceTag').value='';
+}
+
+// Testimonials rotation
+let tIndex=0;
+function startTestimonials(){
+  setInterval(()=>{
+    document.getElementById('testimonialBox').innerText=testimonials[tIndex];
+    tIndex=(tIndex+1)%testimonials.length;
+  },4000);
+}
+
+// Admin tabs
+function showAdminTab(tab){
+  document.querySelectorAll('#adminDashboard > div[id$="Tab"]').forEach(c=>c.style.display='none');
+  document.getElementById(tab+'Tab').style.display='block';
+}
+
+// Language
+function changeLanguage(){ alert("Language changed to "+document.getElementById('languageSelect').value+" (simulation)"); }
+
+</script>
+
+</body>
+</html>
