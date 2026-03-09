@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Ruian Tasks</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f4f7;
+margin:0;
+overflow-x:hidden;
+}
+
+/* header */
+
+header{
+background:#2e7d32;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+/* login */
+
+.login-box{
+max-width:350px;
+margin:40px auto;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ccc;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+background:#2e7d32;
+color:white;
+border:none;
+border-radius:20px;
+font-size:16px;
+cursor:pointer;
+}
+
+/* dashboard */
+
+.dashboard{
+display:none;
+padding:15px;
+max-width:600px;
+margin:auto;
+}
+
+/* cards */
+
+.cards{
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:8px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+font-size:18px;
+}
+
+/* tasks */
+
+.task{
+background:white;
+padding:15px;
+margin-bottom:12px;
+border-radius:8px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.task button{
+width:auto;
+padding:8px 14px;
+font-size:14px;
+}
+
+/* footer */
+
+footer{
+text-align:center;
+padding:20px;
+font-size:14px;
+color:#555;
+}
+
+</style>
+
+<script>
+
+function login(){
+
+document.querySelector(".login-box").style.display="none";
+document.querySelector(".dashboard").style.display="block";
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<header>
+Ruian Tasks
+</header>
+
+<!-- LOGIN -->
+
+<div class="login-box">
+
+<h3>Member Login</h3>
+
+<input type="text" placeholder="Username">
+
+<input type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<p style="text-align:center;margin-top:10px;">
+Registration Fee: <b>49 KES</b>
+</p>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard">
+
+<h3>Dashboard</h3>
+
+<div class="cards">
+
+<div class="card">
+💰 Wallet Balance: 0 KES
+</div>
+
+<div class="card">
+📋 Tasks Completed: 0
+</div>
+
+<div class="card">
+👥 Referral Earnings: 0 KES
+</div>
+
+</div>
+
+<h3>Available Tasks</h3>
+
+<div class="task">
+👍 Like a Facebook Post  
+<br>Reward: 1 KES  
+<br><button>Start Task</button>
+</div>
+
+<div class="task">
+📺 Watch a Video  
+<br>Reward: 2 KES  
+<br><button>Start Task</button>
+</div>
+
+<div class="task">
+🌐 Visit Website  
+<br>Reward: 1 KES  
+<br><button>Start Task</button>
+</div>
+
+<div class="task">
+💬 Comment on Post  
+<br>Reward: 3 KES  
+<br><button>Start Task</button>
+</div>
+
+<div class="task">
+📲 Download an App  
+<br>Reward: 5 KES  
+<br><button>Start Task</button>
+</div>
+
+</div>
+
+<footer>
+
+Help: 0748121890  
+<br><br>
+
+© 2026 Ruian Network
+
+</footer>
+
+</body>
+  </html>
